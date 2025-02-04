@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14F TE AMO</title>
+    <style>
+        body {
+            background-image: url('img/fondo.jpg');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            height: 600vh;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-style: italic;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .message {
+            display: none;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 80%;
+            color: #ffffff;
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+        }
+
+        #countdown {
+            font-size: 1.5em;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+
+        #image {
+            margin-top: 30px;
+            width: 200px;
+            height: auto;
+        }
+
+        #finalImage {
+            margin-top: 30px;
+            width: 300px;
+            height: auto;
+        }
+
+        .text-box {
+            color: #ffffff;
+            font-size: 0.9em;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #revealButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #67d163;
+            color: #2d2d2d;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        #revealButton:hover {
+            background-color: #67d163;
+        }
+
+        #startButton {
+            padding: 15px 30px;
+            background-color: #67d163;
+            color: #2d2d2d;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .message {
+                font-size: 1.2em;
+                padding: 20px;
+            }
+
+            #countdown {
+                font-size: 1.2em;
+            }
+
+            #image {
+                width: 150px;
+            }
+
+            #finalImage {
+                width: 200px;
+            }
+
+            .text-box {
+                font-size: 0.8em;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Página de inicio con mensaje y botón para ir al contador -->
+    <div id="introScreen">
+        <h1>¿Puedo ser tu San Valentin?</h1>
+        <button id="startButton">Si</button>
+    </div>
+
+    <!-- Página del contador -->
+    <div id="counterScreen" style="display: none;">
+        <h1 id="mainMessage">Vas a tener que esperar un poquito amor</h1>
+        <div id="countdown">Tiempo restante para el desbloqueo: <span id="time"></span></div>
+        <img id="image" src="img/e28ebace-c731-45a5-aec2-98b0b1217369.webp" alt="ojitos">
+        <div class="text-box">
+            <p>el 14/02 a las 00:00 tenes que abrir la pagina, te amo.</p>
+        </div>
+        <button id="revealButton" style="display:none;">CARTITA PARA MI AMOR</button>
+    </div>
+
+    <!-- Mensaje bloqueado (que aparece cuando el contador llega a 0) -->
+    <div id="lockedMessage" class="message">
+        <p>Feliz San Valentin amor. Sos mi persona favorita y por eso te hice esta pagina con una cartita que puedas leer donde y cuando quieras</p>
+        <p>Gracias por estar conmigo todo este tiempo a pesar de las complicaciones. Toda mi vida voy a apreciar lo que haces por mí.
+            Me encanta pasar tiempo con vos y quiero poder hacerlo siempre. Y te vuelvo a decir gracias porque literalmente cambias mi vida.
+            Sé que tengo a alguien que me ayuda en todo lo que necesito, y eso es lo que más valoro de vos. Te amo para siempre, mi amor.</p>
+        </p>
+    </div>
+
+    <script>
+        // Fecha y hora de desbloqueo (14/02 a las 00:00 hora Argentina)
+        const fechaDesbloqueo = new Date('2025-02-04T09:15:00-03:00'); // Hora Argentina
+        const ahora = new Date();
+
+        // Función para actualizar el contador
+        function actualizarContador() {
+            const ahora = new Date();
+            const tiempoRestante = fechaDesbloqueo - ahora;
+
+            if (tiempoRestante <= 0) {
+                // Ocultar el mensaje original, el contador, la imagen y el texto informativo
+                document.getElementById('mainMessage').style.display = 'none';
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('image').style.display = 'none';
+                document.querySelector('.text-box').style.display = 'none';
+
+                // Mostrar el botón para revelar el mensaje final
+                document.getElementById('revealButton').style.display = 'inline-block';
+            } else {
+                const dias = Math.floor(tiempoRestante / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((tiempoRestante % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((tiempoRestante % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((tiempoRestante % (1000 * 60)) / 1000);
+
+                document.getElementById('time').innerText = `${dias}D ${horas}H ${minutos}M ${segundos}S`;
+            }
+        }
+
+        // Función para revelar el mensaje al presionar el botón
+        function revelarMensaje() {
+            document.body.innerHTML = ''; // Eliminar todo el contenido de la página
+
+            const mensajeFinal = document.createElement('div');
+            mensajeFinal.classList.add('message');
+            mensajeFinal.innerHTML = `
+                <p>Feliz San Valentin amor. Sos mi persona favorita y por eso te hice esta pagina con una cartita que puedas leer donde y cuando quieras</p>
+                <p>Gracias por estar conmigo todo este tiempo a pesar de las complicaciones. Toda mi vida voy a apreciar lo que haces por mí.
+                Me encanta pasar tiempo con vos y quiero poder hacerlo siempre. Y te vuelvo a decir gracias porque literalmente cambias mi vida.
+                Sé que tengo a alguien que me ayuda en todo lo que necesito, y eso es lo que más valoro de vos. Te amo para siempre, mi amor.</p>
+            `;
+            document.body.appendChild(mensajeFinal);
+
+            const nuevaImagen = document.createElement('img');
+            nuevaImagen.src = 'img/fb54c493-fa97-45b7-8607-4e821e690471.webp';
+            nuevaImagen.alt = 'besito';
+            nuevaImagen.id = 'finalImage';
+            document.body.appendChild(nuevaImagen);
+
+            const nuevoTexto = document.createElement('div');
+            nuevoTexto.classList.add('text-box');
+            nuevoTexto.innerHTML = '<p> </p>';
+            document.body.appendChild(nuevoTexto);
+
+            mensajeFinal.style.display = 'block';
+        }
+
+        // Función para ir de la pantalla de inicio al contador
+        document.getElementById('startButton').addEventListener('click', function() {
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('counterScreen').style.display = 'block';
+        });
+
+                document.getElementById('startButton').addEventListener('click', function() {
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('counterScreen').style.display = 'block';
+        });
+
+        // Función para añadir evento al botón para revelar el mensaje
+        document.getElementById('revealButton').addEventListener('click', revelarMensaje);
+
+        // Actualizar el contador cada segundo
+        setInterval(actualizarContador, 1000);
+    </script>
+
+</body>
+</html>
